@@ -23,6 +23,12 @@ public class PlayerMove : MonoBehaviour
         yMove = Input.GetAxisRaw("Vertical");
         movement.y = yMove * speedMult;
         movement.x = xMove * speedMult;
+        // Get the player's direction
+        Vector2 direction = new Vector2(xMove, yMove).normalized;
+
+        // Debug Log
+        Debug.Log("Player Direction: " + direction);
+        Debug.DrawLine(transform.position, (Vector2)transform.position + direction);
     }
     private void FixedUpdate()
     {
