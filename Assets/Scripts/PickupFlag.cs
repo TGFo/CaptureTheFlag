@@ -5,22 +5,26 @@ using UnityEngine;
 public class PickupFlag : MonoBehaviour
 {
     public bool hasFlag;
-    public GameObject flag;
-    public GameObject flagPos;
+    public GameObject ownFlag;
+    public Transform flagPos;
     public GameObject flagOriginalPos;
+    public PickupFlag otherAgent;
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        Transform collisionTransform = collision.transform;
         if (collision.gameObject.tag == "flag")
         {
             Debug.Log("flag");
-            if (collision.gameObject == flag)
+            if (collision.gameObject == ownFlag)
             {
-                collision.transform.position = flagOriginalPos.transform.position;
+                collisionTransform.position = flagOriginalPos.transform.position;
+                collisionTransform.parent = null;
+                otherAgent.hasFlag = false;
             }
             else
             {
-                collision.transform.parent = flagPos.transform;
+                collisionTransform.parent = flagPos;
                 hasFlag = true;
             }
         }

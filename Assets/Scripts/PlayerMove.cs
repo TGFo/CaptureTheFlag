@@ -27,7 +27,7 @@ public class PlayerMove : MonoBehaviour
         Vector2 direction = new Vector2(xMove, yMove).normalized;
 
         // Debug Log
-        Debug.Log("Player Direction: " + direction);
+        //Debug.Log("Player Direction: " + direction);
         Debug.DrawLine(transform.position, (Vector2)transform.position + direction);
     }
     private void FixedUpdate()
