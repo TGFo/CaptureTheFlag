@@ -127,19 +127,19 @@ public class Projectile : MonoBehaviour
             transform.position = senderTranform.position;
         }
     }
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        Debug.Log("Triggered");
-        if(collision.gameObject == target && hitTarget == false)
-        {
-            hitTarget = true;
-            StartCoroutine(StunTarget(stateManager.GetRandomRespawnLocation(collision.tag)));
-        }
-        else if(collision.gameObject == sender && currentState == ProjectileStates.returnToSender)
-        {
-            SetState(ProjectileStates.idle);
-        }
-    }
+    //private void OnTriggerEnter2D(Collider2D collision)
+    //{
+    //    Debug.Log("Triggered");
+    //    if(collision.gameObject == target && hitTarget == false)
+    //    {
+    //        hitTarget = true;
+    //        StartCoroutine(StunTarget(stateManager.GetRandomRespawnLocation(collision.tag)));
+    //    }
+    //    else if(collision.gameObject == sender && currentState == ProjectileStates.returnToSender)
+    //    {
+    //        SetState(ProjectileStates.idle);
+    //    }
+    //}
     public IEnumerator StunTarget(Transform respawnLocation)                                                                              //stuns the target by disabling the object then moving it, enabling it after 3 seconds
     {
         //disables the target
