@@ -6,6 +6,7 @@ TagManager:
   tags:
   - flag
   - AiAgent
+  - Projectile
   layers:
   - Default
   - TransparentFX

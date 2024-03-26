@@ -18,6 +18,7 @@ public class StateManager : MonoBehaviour
     public FlagBaseScript AIBase;
 
     private Transform AIBasePos;
+    private Transform PlayerBasePos;
 
     public Transform playerFlagPos;
     public Transform AIFlagPos;
@@ -34,8 +35,10 @@ public class StateManager : MonoBehaviour
     private Attack playerAttack;
     private Attack AIAttack;
 
-    public GameObject spawnPositionsParent;
-    public Transform[] spawnPositions;
+    public GameObject AISpawnPositionsParent;
+    public GameObject playerSpawnsParent;
+    [SerializeField] Transform[] AISpawnPositions;
+    [SerializeField] Transform[] playerSpawnPositions;
 
     private NavMeshAgent agent;
     public float avoidanceRadius = 5;
@@ -50,7 +53,9 @@ public class StateManager : MonoBehaviour
         playerAttack = player.GetComponent<Attack>();
         AIAttack = AIAgent.GetComponent<Attack>();
         AIBasePos = AIBase.GetComponent<Transform>();
-        spawnPositions = spawnPositionsParent.GetComponentsInChildren<Transform>();
+        PlayerBasePos = playerBase.GetComponent<Transform>();
+        AISpawnPositions = AISpawnPositionsParent.GetComponentsInChildren<Transform>();
+        playerSpawnPositions = playerSpawnsParent.GetComponentsInChildren<Transform>();
         SetState(AIStates.pursueFlag);
     }
 
@@ -63,11 +68,15 @@ public class StateManager : MonoBehaviour
     private void SetState(AIStates newState)
     {
         currentState = newState;
-        EnterState();
+        Debug.Log("Entering State: " + currentState);
     }
 
     private void PerformStateBehavior()
     {
+        if(AIAgent.activeSelf == false)
+        {
+            return;
+        }
         switch (currentState)
         {
             case AIStates.pursueFlag:
@@ -85,36 +94,25 @@ public class StateManager : MonoBehaviour
         }
     }
 
-    private void EnterState()
+    private void AvoidPlayer(Transform avoidee, Transform finalLocation)
     {
-        Debug.Log("Entering State: " + currentState);
-    }
-
-    private void AvoidPlayer(Transform finalLocation)
-    {
-        // Calculate the distance between the agent and the player
-        float distanceToPlayer = Vector2.Distance(AIPos.position, playerPos.position);
+        float distanceToPlayer = Vector2.Distance(AIPos.position, avoidee.position);
 
         if (distanceToPlayer <= avoidanceRadius)
         {
-            // Calculate the direction away from the player
-            Vector2 moveAwayDirection = (AIPos.position - playerPos.position).normalized;
+            Vector2 moveAwayDirection = (AIPos.position - avoidee.position).normalized;
 
-            // Calculate the new position outside the avoidance radius
             Vector2 newPosition = (Vector2)AIPos.position + moveAwayDirection * avoidanceRadius;
 
-            // Find a point on the NavMesh closest to the calculated position outside the avoidance radius
-            NavMeshHit hit;
-            Debug.DrawLine (agent.transform.position, newPosition);
-            if (NavMesh.SamplePosition(newPosition, out hit, avoidanceRadius, NavMesh.AllAreas))
+            Debug.DrawLine(agent.transform.position, newPosition);
+            if (NavMesh.SamplePosition(newPosition, out NavMeshHit hit, avoidanceRadius, NavMesh.AllAreas))
             {
-                // Set the destination of the NavMeshAgent to the new position outside the avoidance radius
-                agent.SetDestination(newPosition);
+                agent.SetDestination(hit.position);
             }
         }
         else
         {
-            // If the distance to the player is greater than the avoidance radius, move towards the player
+
             agent.SetDestination(finalLocation.position);
         }
     }
@@ -123,6 +121,10 @@ public class StateManager : MonoBehaviour
     {
         if(AIPickup.hasFlag == false)
         {
+            if(playerPickup.hasFlag == true)
+            {
+                SetState(AIStates.attackPlayer);
+            }
             agent.SetDestination(playerFlagPos.position);
         }
         else
@@ -134,8 +136,8 @@ public class StateManager : MonoBehaviour
     {
         if(AIPickup.hasFlag == false && playerPickup.hasFlag == true)
         {
-            AvoidPlayer(playerPos);
-            AIAttack.AttackActor(playerPos);
+            AvoidPlayer(playerPos, playerPos);
+            AIAttack.AttackActor();
         }
         else 
         {
@@ -160,15 +162,31 @@ public class StateManager : MonoBehaviour
     {
         if(AIPickup.hasFlag == true)
         {
-            AvoidPlayer(AIBasePos);
+            AvoidPlayer(playerPos, AIBasePos);
         }
         else
         {
             SetState(AIStates.attackPlayer);
         }
     }
-    public void KillActor(GameObject actor)
-    {
 
+    public Transform GetRandomRespawnLocation(string tag)
+    {
+        Transform[] locationArray = null;
+        if(tag != "Player" && tag != "AiAgent")
+        {
+            return null;
+        }
+        if(tag == "Player")
+        {
+            locationArray = playerSpawnPositions;
+        }
+        else if(tag == "AiAgent")
+        {
+            locationArray = AISpawnPositions;
+        }
+        Transform location = locationArray[Random.Range(0, locationArray.Length - 1)];
+        Debug.Log(location.position);
+        return location;
     }
 }

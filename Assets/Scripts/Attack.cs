@@ -11,12 +11,19 @@ public class Attack : MonoBehaviour
     {
         projectile = projectileObject.GetComponent<Projectile>();
     }
-    public void AttackActor(Transform target)
+    private void Update()
+    {
+        if(projectile.currentState == Projectile.ProjectileStates.idle)
+        {
+            projectileReady = true;
+        }
+    }
+    public void AttackActor()
     {
         if (projectileReady)
         {
             projectileReady = false;
-            projectile.currentState = Projectile.projectileStates.chaseTarget;
+            projectile.SetState(Projectile.ProjectileStates.chaseTarget);
         }
     }
 }

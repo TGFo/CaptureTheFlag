@@ -9,13 +9,8 @@ public class PlayerMove : MonoBehaviour
     float yMove;
     Vector2 movement;
     public int speedMult = 2;
+    public Attack playerAttack;
     
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
     // Update is called once per frame
     void Update()
     {
@@ -29,6 +24,11 @@ public class PlayerMove : MonoBehaviour
         // Debug Log
         //Debug.Log("Player Direction: " + direction);
         Debug.DrawLine(transform.position, (Vector2)transform.position + direction);
+
+        if(Input.GetKeyUp(KeyCode.Space ))
+        {
+            playerAttack.AttackActor();
+        }
     }
     private void FixedUpdate()
     {

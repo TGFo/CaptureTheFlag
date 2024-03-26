@@ -6,27 +6,46 @@ public class PickupFlag : MonoBehaviour
 {
     public bool hasFlag;
     public GameObject ownFlag;
-    public Transform flagPos;
-    public GameObject flagOriginalPos;
+    private Transform otherFlag = null;
+    public Transform flagHand;
+    public Transform flagOriginalPos;
     public PickupFlag otherAgent;
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        Transform collisionTransform = collision.transform;
-        if (collision.gameObject.tag == "flag")
+        otherFlag = collision.transform;
+        if (collision.gameObject.CompareTag("flag"))
         {
-            Debug.Log("flag");
+            //Debug.Log("flag");
             if (collision.gameObject == ownFlag)
             {
-                collisionTransform.position = flagOriginalPos.transform.position;
-                collisionTransform.parent = null;
-                otherAgent.hasFlag = false;
+                ResetFlag();
             }
             else
             {
-                collisionTransform.parent = flagPos;
+                otherFlag.parent = flagHand;
                 hasFlag = true;
             }
         }
+    }
+
+    public void DropFlag()
+    {
+        if(otherFlag == null) 
+        {
+            return;
+        }
+        if(hasFlag == true)
+        {
+            hasFlag = false;
+            otherFlag.parent = null;
+        }
+    }
+
+    public void ResetFlag()
+    {
+        otherFlag.position = flagOriginalPos.position;
+        otherFlag.parent = null;
+        otherAgent.hasFlag = false;
     }
 }
