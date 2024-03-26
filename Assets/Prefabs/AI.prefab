@@ -101,8 +101,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hasFlag: 0
   ownFlag: {fileID: 0}
-  flagPos: {fileID: 0}
+  flagHand: {fileID: 0}
   flagOriginalPos: {fileID: 0}
+  otherAgent: {fileID: 0}
 --- !u!61 &6132192807907255720
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -184,7 +185,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 345664437291893346}
-  - component: {fileID: 8573190961621157700}
   - component: {fileID: 2842773150648634944}
   m_Layer: 0
   m_Name: AI
@@ -209,21 +209,6 @@ Transform:
   - {fileID: 1479858521782704298}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8573190961621157700
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3208467665075432911}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6faa9d1c1025bea459a9cfdd9ab84aab, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  location: {fileID: 0}
-  NavPoint: {x: 0, y: 0}
-  agent: {fileID: 2842773150648634944}
 --- !u!195 &2842773150648634944
 NavMeshAgent:
   m_ObjectHideFlags: 0

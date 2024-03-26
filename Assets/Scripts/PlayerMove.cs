@@ -34,4 +34,6 @@ public class PlayerMove : MonoBehaviour
     {
         rb.MovePosition(rb.position + (movement * Time.fixedDeltaTime));
     }
+    
+     //script that allows the player to move their character with WASD
 }

@@ -5,6 +5,7 @@ using UnityEngine.AI;
 
 public class AIMoveToLocation : MonoBehaviour
 {
+    //test script should be ignored
     public Transform location;
     public Vector2 NavPoint;
     public NavMeshAgent agent;
